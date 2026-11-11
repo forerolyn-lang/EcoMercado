@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EcoMercado Montería</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--g:#16a34a;--g2:#dcfce7;--b:#0ea5e9;--bg:#fff;--p:#f3f6f4;--c:#fff;--t:#14231a;--m:#64748b;--l:#e2e8f0;--r:#dc2626;--y:#d97706;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a14;--p:#16241c;--c:#1b2c22;--t:#e8f3ec;--m:#94a3a0;--l:#2a3d32;--g2:#14532d}}
+:root[data-theme="dark"]{--bg:#0f1a14;--p:#16241c;--c:#1b2c22;--t:#e8f3ec;--m:#94a3a0;--l:#2a3d32;--g2:#14532d}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t)}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{display:flex;min-height:100vh}
+aside{width:230px;background:var(--p);padding:16px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;color:var(--g);padding:4px 8px 14px}
+.logo small{display:block;color:var(--m);font-weight:500;font-size:11px}
+.nav{border:0;background:none;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;gap:10px;align-items:center;color:var(--m)}
+.nav:hover{background:var(--l)}.nav.on{background:var(--g2);color:var(--g);font-weight:600}
+main{flex:1;min-width:0;padding:22px 26px 40px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+h1{margin:0;font-size:24px}h2{margin:0 0 10px;font-size:16px}.sub{color:var(--m);font-size:13px}
+.demo{background:#fef3c7;color:#92400e;border-radius:8px;padding:6px 10px;font-size:12px;margin-bottom:14px;display:inline-block}
+.grid{display:grid;gap:14px}.k4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.k2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--c);border:1px solid var(--l);border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.kpi b{display:block;font-size:28px;color:var(--g);margin-top:4px}.kpi .ic{float:right;background:var(--g2);border-radius:12px;padding:8px;font-size:20px}
+.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.o{background:none;color:var(--g);border:1px solid var(--g)}.btn.d{background:var(--r)}.btn.s{padding:4px 9px;font-size:12px}
+input,select,textarea{background:var(--bg);border:1px solid var(--l);border-radius:10px;padding:8px 10px;width:100%}
+label{font-size:12px;color:var(--m);display:block;margin-bottom:10px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--m);font-weight:600;padding:8px;border-bottom:1px solid var(--l);white-space:nowrap}td{padding:8px;border-bottom:1px solid var(--l)}
+.tag{padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.Disponible,.Activo,.Completada{background:#dcfce7;color:#166534}.Lleno,.Inactivo{background:#fee2e2;color:#991b1b}.Pendiente{background:#fef3c7;color:#92400e}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}.bar input,.bar select{width:auto;flex:1;min-width:130px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.mb{background:var(--c);border-radius:16px;padding:20px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g);color:#fff;padding:10px 16px;border-radius:10px;z-index:60}
+.chk{display:flex;flex-wrap:wrap;gap:6px}.chk label{margin:0;border:1px solid var(--l);border-radius:8px;padding:3px 7px;display:flex;gap:4px;align-items:center;color:var(--t)}.chk input{width:auto}
+.can{border-radius:14px;padding:16px;color:#fff;text-align:center}.can div{font-size:40px}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--g2),var(--bg));padding:16px}
+.login .card{max-width:380px;width:100%}.ul{list-style:none;padding:0;margin:0}.ul li{padding:8px 0;border-bottom:1px solid var(--l);font-size:13px}
+.mt{display:none;border:0;background:var(--p);border-radius:8px;padding:8px 12px;font-size:18px}
+@media(max-width:800px){aside{position:fixed;z-index:40;left:-240px;transition:.2s;box-shadow:2px 0 12px rgba(0,0,0,.2)}aside.open{left:0}.mt{display:block}main{padding:14px}}
+@media print{aside,.bar,.mt,.btn{display:none!important}}
+</style></head><body><div id="root"></div><div id="m"></div>
+<script>
+const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MAT=['Plástico','Cartón','Papel','Vidrio','Otros aprovechables'],MC=['#0ea5e9','#a16207','#94a3b8','#16a34a','#8b5cf6'],ST=['Disponible','Lleno','Pendiente de recolección'];
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const mk=k=>MES[+k.slice(5,7)-1]+' '+k.slice(2,4);
+const stc=s=>s.split(' ')[0];
+function seed(){
+ const z=['Entrada principal','Zona de carnes','Frutas y verduras','Pescadería','Abarrotes','Zona de comidas','Parqueadero','Bodega central','Zona de flores','Descargue'];
+ const pts=[...Array(20)].map((_,i)=>({id:'PE-'+String(i+1).padStart(2,'0'),loc:z[i%10]+(i<10?' – Sector A':' – Sector B'),mats:i%4==0?MAT.slice(0,3):i%4==1?['Cartón','Papel','Vidrio']:i%4==2?['Plástico','Vidrio','Otros aprovechables']:MAT.slice(0,4),st:ST[i%3==1?1:i%5==2?2:0],last:'2026-11-0'+(1+i%9)}));
+ const rc=[['Marta Lucía Pérez','1000000001','3001112233','Asociación Demo Recicladores A','Activo'],['Jorge Hernández','1000000002','3002223344','Asociación Demo Recicladores A','Activo'],['Rosa Elena Díaz','1000000003','3003334455','Asociación Demo Recicladores B','Activo'],['Luis Fernando Ortega','1000000004','3004445566','Asociación Demo Recicladores B','Activo'],['Ana Milena Santos','1000000005','3005556677','Independiente (demo)','Inactivo'],['Pedro Pablo Mercado','1000000006','3006667788','Asociación Demo Recicladores A','Activo']].map((r,i)=>({id:'R'+(i+1),name:r[0],doc:r[1],tel:r[2],aso:r[3],st:r[4]}));
+ const rec=[...Array(64)].map((_,i)=>{const m=5+i%7,d=m==11?1+i%10:1+(i*7)%28;return{id:'C'+i,date:`2026-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`,pt:pts[(i*3)%20].id,mat:MAT[(i*7)%5==4&&i%3?4:i%4],kg:20+(i*37)%90,rec:rc[i%4].id,obs:i%5?'':'Material limpio y separado'}}).sort((a,b)=>b.date.localeCompare(a.date));
+ const ro=[{id:'T1',name:'Ruta Norte – mañana',day:'Lunes y jueves',time:'07:00',pts:['PE-01','PE-02','PE-03','PE-04'],rec:'R1',st:'Pendiente'},{id:'T2',name:'Ruta Sur – tarde',day:'Martes y viernes',time:'14:00',pts:['PE-11','PE-12','PE-13'],rec:'R2',st:'Completada'},{id:'T3',name:'Ruta Bodega y Descargue',day:'Miércoles',time:'09:30',pts:['PE-08','PE-10','PE-18'],rec:'R3',st:'Pendiente'}];
+ return{pts,rec,rc,ro}}
+let S;try{S=JSON.parse(localStorage.getItem('eco1'))}catch(e){}S=S||seed();
+let user=null;try{user=localStorage.getItem('eco1u')}catch(e){}
+const save=()=>{try{localStorage.setItem('eco1',JSON.stringify(S))}catch(e){}};
+const toast=t=>{const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)};
+const modal=h=>{$('m').innerHTML=h?`<div class="modal" onclick="if(event.target===this)modal()"><div class="mb">${h}</div></div>`:''};
+const ask=(msg,fn)=>{window._ok=()=>{modal();fn()};modal(`<h2>Confirmar</h2><p>${msg}</p><div class="bar"><button class="btn d" onclick="_ok()">Eliminar</button><button class="btn o" onclick="modal()">Cancelar</button></div>`)};
+const pn=id=>S.rc.find(r=>r.id===id)?.name||'—';
+const sum=a=>a.reduce((x,r)=>x+r.kg,0);
+const by=(a,f)=>a.reduce((o,r)=>(o[f(r)]=(o[f(r)]||0)+r.kg,o),{});
+let V='inicio',F={q:'',s:'',rq:'',rm:'',from:'',to:'',im:''},CH={};
+const NAV=[['inicio','🏠','Inicio'],['puntos','📍','Puntos ecológicos'],['recol','♻️','Recolecciones'],['rutas','🚛','Rutas y horarios'],['reci','👷','Recicladores'],['edu','🌱','Educación ambiental'],['info','📊','Informes']];
+const LOGO='<svg width="34" height="34" viewBox="0 0 40 40"><circle cx="20" cy="20" r="19" fill="#16a34a"/><path d="M20 9l5 8h-3.5l3 5H27l-2 3.5M14 24l-2.5-4 3-5M17 29h6M20 9l-5 8M14 24l-3 5h6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="28" r="4" fill="#0ea5e9"/></svg>';
+function login(){
+ $('root').innerHTML=`<div class="login"><div class="card"><div class="logo" style="justify-content:center;flex-direction:column;font-size:22px">${LOGO}EcoMercado Montería<small>Sistema inteligente de gestión de residuos reciclables</small></div>
+ <label>Correo electrónico<input id="em" type="email" value="admin@ecomercado.co"></label><label>Contraseña<input id="pw" type="password" value="admin123"></label>
+ <button class="btn" style="width:100%" onclick="doLogin()">Iniciar sesión</button>
+ <p class="sub"><b>Usuarios de demostración:</b><br>admin@ecomercado.co / admin123 (Administrador)<br>comerciante@ecomercado.co / demo123<br>reciclador@ecomercado.co / demo123</p>
+ <span class="demo">Prototipo universitario · datos de demostración</span></div></div>`}
+function doLogin(){const U={'admin@ecomercado.co':['admin123','Administración del mercado'],'comerciante@ecomercado.co':['demo123','Comerciante (demo)'],'reciclador@ecomercado.co':['demo123','Reciclador (demo)']};const u=U[$('em').value.trim().toLowerCase()];if(!u||u[0]!==$('pw').value)return toast('Credenciales incorrectas');user=u[1];try{localStorage.setItem('eco1u',user)}catch(e){}shell()}
+function logout(){user=null;try{localStorage.removeItem('eco1u')}catch(e){}login()}
+function shell(){
+ $('root').innerHTML=`<div class="app"><aside id="sb"><div class="logo">${LOGO}<div>EcoMercado<br>Montería<small>${esc(user)}</small></div></div>${NAV.map(n=>`<button class="nav" data-v="${n[0]}" onclick="go('${n[0]}')">${n[1]} ${n[2]}</button>`).join('')}<button class="nav" onclick="logout()" style="margin-top:auto">🚪 Cerrar sesión</button></aside><main id="mn"></main></div>`;go(V)}
+function go(v){V=v;$('sb').classList.remove('open');document.querySelectorAll('.nav[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v==v));Object.values(CH).forEach(c=>c.destroy());CH={};
+ const t=NAV.find(n=>n[0]==v)[2];$('mn').innerHTML=`<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="mt" onclick="$('sb').classList.toggle('open')">☰</button><div><h1>${t}</h1><div class="sub">EcoMercado Montería · Mercados públicos del área urbana</div></div></div><span class="demo">Datos de demostración · prototipo sin implementación física real</span></div><div id="v"></div>`;
+ $('v').innerHTML=VIEWS[v]();(AFTER[v]||(()=>{}))();window.scrollTo(0,0)}
+const chart=(id,cfg)=>{CH[id]?.destroy();CH[id]=new Chart($(id),cfg)};
+const monthly=a=>{const o=by(a,r=>r.date.slice(0,7));const k=Object.keys(o).sort();return[k.map(mk),k.map(x=>o[x])]};
+function form(title,fields,vals,onSave){
+ window._f=()=>{const fd=new FormData($('ff'));const o={};fields.forEach(f=>o[f.k]=f.t=='chk'?fd.getAll(f.k):fd.get(f.k));if(fields.some(f=>f.r&&(!o[f.k]||!o[f.k].length)))return toast('Completa los campos obligatorios');modal();onSave(o)};
+ modal(`<h2>${title}</h2><form id="ff" onsubmit="event.preventDefault();_f()">${fields.map(f=>{const v=vals[f.k]??'';return `<label>${f.l}${f.r?' *':''}`+(f.t=='sel'?`<select name="${f.k}">${f.o.map(o=>`<option value="${esc(o[0])}" ${v==o[0]?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`:f.t=='chk'?`<div class="chk">${f.o.map(o=>`<label><input type="checkbox" name="${f.k}" value="${esc(o[0])}" ${(v||[]).includes(o[0])?'checked':''}>${esc(o[1])}</label>`).join('')}</div>`:f.t=='ta'?`<textarea name="${f.k}" rows="2">${esc(v)}</textarea>`:`<input name="${f.k}" type="${f.t||'text'}" value="${esc(v)}" ${f.t=='number'?'min="0" step="0.1"':''}>`)+'</label>'}).join('')}<div class="bar"><button class="btn">Guardar</button><button type="button" class="btn o" onclick="modal()">Cancelar</button></div></form>`)}
+const ptOpt=()=>S.pts.map(p=>[p.id,p.id+' · '+p.loc]),rcOpt=()=>S.rc.filter(r=>r.st=='Activo').map(r=>[r.id,r.name]);
+const VIEWS={},AFTER={};
+// INICIO
+VIEWS.inicio=()=>{const kg=sum(S.rec);const comp=['Diagnóstico y línea base','Puntos ecológicos','Recolección selectiva y articulación de actores','Sensibilización y capacitación','Seguimiento e indicadores'];
+ return`<div class="grid k4">${[['♻️','Kilogramos reciclados',kg.toLocaleString('es-CO')+' kg'],['📍','Puntos ecológicos',S.pts.length],['🚛','Recolecciones realizadas',S.rec.length],['👷','Recicladores registrados',S.rc.length]].map(k=>`<div class="card kpi"><span class="ic">${k[0]}</span><span class="sub">${k[1]}</span><b>${k[2]}</b></div>`).join('')}</div>
+ <div class="grid k2" style="margin-top:14px"><div class="card"><h2>Residuos recolectados por mes (kg)</h2><canvas id="c1" height="200"></canvas></div><div class="card"><h2>Clasificación por tipo de material</h2><canvas id="c2" height="200"></canvas></div></div>
+ <div class="grid k2" style="margin-top:14px"><div class="card"><h2>Últimas actividades</h2><ul class="ul">${S.rec.slice(0,6).map(r=>`<li>♻️ <b>${r.kg} kg</b> de ${r.mat.toLowerCase()} en ${r.pt} · ${pn(r.rec)} <span class="sub">(${r.date})</span></li>`).join('')}</ul></div>
+ <div class="card"><h2>Componentes del proyecto</h2><ul class="ul">${comp.map((c,i)=>`<li><b>${i+1}.</b> ${c}</li>`).join('')}</ul></div></div>`};
+AFTER.inicio=()=>{const[l,d]=monthly(S.rec);chart('c1',{type:'bar',data:{labels:l,datasets:[{data:d,backgroundColor:'#16a34a',borderRadius:8}]},options:{plugins:{legend:{display:false}}}});const o=by(S.rec,r=>r.mat);chart('c2',{type:'doughnut',data:{labels:MAT,datasets:[{data:MAT.map(m=>o[m]||0),backgroundColor:MC}]}})};
+// PUNTOS
+const ptRows=()=>S.pts.filter(p=>(!F.s||p.st==F.s)&&(p.id+p.loc+p.mats.join()).toLowerCase().includes(F.q.toLowerCase())).map(p=>`<tr><td><b>${p.id}</b></td><td>${esc(p.loc)}</td><td>${p.mats.join(', ')}</td><td><span class="tag ${stc(p.st)}">${p.st}</span></td><td>${p.last||'—'}</td><td style="white-space:nowrap"><button class="btn s o" onclick="ptView('${p.id}')">Ver</button> <button class="btn s o" onclick="ptEdit('${p.id}')">Editar</button> <button class="btn s d" onclick="ptDel('${p.id}')">Eliminar</button></td></tr>`).join('')||'<tr><td colspan="6">Sin resultados</td></tr>';
+VIEWS.puntos=()=>`<div class="card"><div class="bar"><input placeholder="🔍 Buscar punto, ubicación o material" value="${esc(F.q)}" oninput="F.q=this.value;$('tb').innerHTML=ptRows()"><select onchange="F.s=this.value;$('tb').innerHTML=ptRows()"><option value="">Todos los estados</option>${ST.map(s=>`<option ${F.s==s?'selected':''}>${s}</option>`).join('')}</select><button class="btn" onclick="ptEdit()">+ Nuevo punto</button></div><div class="tw"><table><tr><th>Código</th><th>Ubicación</th><th>Residuos</th><th>Estado</th><th>Última recolección</th><th></th></tr><tbody id="tb">${ptRows()}</tbody></table></div></div>`;
+const ptF=[{k:'id',l:'Código',r:1},{k:'loc',l:'Ubicación dentro del mercado',r:1},{k:'mats',l:'Tipo de residuos que recibe',t:'chk',o:MAT.map(m=>[m,m]),r:1},{k:'st',l:'Estado',t:'sel',o:ST.map(s=>[s,s])},{k:'last',l:'Fecha de última recolección',t:'date'}];
+function ptEdit(id){const p=S.pts.find(x=>x.id==id);form(p?'Editar punto':'Nuevo punto ecológico',ptF,p||{id:'PE-'+String(S.pts.length+1).padStart(2,'0'),st:'Disponible'},o=>{if(!p&&S.pts.some(x=>x.id==o.id))return toast('Ese código ya existe');if(p)Object.assign(p,o);else S.pts.push(o);save();toast('Punto guardado ✔');go('puntos')})}
+function ptDel(id){ask(`¿Eliminar el punto ${id}?`,()=>{S.pts=S.pts.filter(p=>p.id!=id);save();toast('Punto eliminado');go('puntos')})}
+function ptView(id){const p=S.pts.find(x=>x.id==id),r=S.rec.filter(x=>x.pt==id);modal(`<h2>${p.id} · ${esc(p.loc)}</h2><p>Residuos: ${p.mats.join(', ')}<br>Estado: <span class="tag ${stc(p.st)}">${p.st}</span><br>Última recolección: ${p.last||'—'}<br>Recolecciones registradas: ${r.length} (${sum(r)} kg)</p><button class="btn o" onclick="modal()">Cerrar</button>`)}
+// RECOLECCIONES
+const rcRows=()=>S.rec.filter(r=>(!F.rm||r.mat==F.rm)&&(r.pt+r.mat+pn(r.rec)+r.obs).toLowerCase().includes(F.rq.toLowerCase())).slice(0,60).map(r=>`<tr><td>${r.date}</td><td>${r.pt}</td><td>${r.mat}</td><td>${r.kg} kg</td><td>${esc(pn(r.rec))}</td><td>${esc(r.obs)}</td><td style="white-space:nowrap"><button class="btn s o" onclick="reEdit('${r.id}')">Editar</button> <button class="btn s d" onclick="reDel('${r.id}')">Eliminar</button></td></tr>`).join('')||'<tr><td colspan="7">Sin resultados</td></tr>';
+VIEWS.recol=()=>`<div class="card"><div class="bar"><input placeholder="🔍 Buscar" value="${esc(F.rq)}" oninput="F.rq=this.value;$('tb').innerHTML=rcRows()"><select onchange="F.rm=this.value;$('tb').innerHTML=rcRows()"><option value="">Todos los materiales</option>${MAT.map(s=>`<option ${F.rm==s?'selected':''}>${s}</option>`).join('')}</select><button class="btn" onclick="reEdit()">+ Registrar recolección</button></div><div class="tw"><table><tr><th>Fecha</th><th>Punto</th><th>Material</th><th>Cantidad</th><th>Reciclador</th><th>Observaciones</th><th></th></tr><tbody id="tb">${rcRows()}</tbody></table></div></div>`;
+function reEdit(id){const r=S.rec.find(x=>x.id==id);form(r?'Editar recolección':'Registrar recolección',[{k:'date',l:'Fecha de recolección',t:'date',r:1},{k:'pt',l:'Punto ecológico',t:'sel',o:ptOpt()},{k:'mat',l:'Tipo de material',t:'sel',o:MAT.map(m=>[m,m])},{k:'kg',l:'Cantidad (kg)',t:'number',r:1},{k:'rec',l:'Reciclador encargado',t:'sel',o:rcOpt()},{k:'obs',l:'Observaciones',t:'ta'}],r||{date:new Date().toISOString().slice(0,10)},o=>{o.kg=+o.kg;if(!(o.kg>0))return toast('La cantidad debe ser mayor que 0');if(r)Object.assign(r,o);else{S.rec.unshift({id:'C'+Date.now(),...o});const p=S.pts.find(x=>x.id==o.pt);if(p)p.last=o.date}S.rec.sort((a,b)=>b.date.localeCompare(a.date));save();toast('Recolección guardada · estadísticas actualizadas ✔');go('recol')})}
+function reDel(id){ask('¿Eliminar esta recolección?',()=>{S.rec=S.rec.filter(r=>r.id!=id);save();toast('Recolección eliminada');go('recol')})}
+// RUTAS
+VIEWS.rutas=()=>{const card=r=>`<div class="card"><div class="bar" style="justify-content:space-between"><b>${esc(r.name)}</b><span class="tag ${r.st}">${r.st}</span></div><div class="sub">🗓 ${esc(r.day)} · 🕐 ${r.time}<br>👷 ${esc(pn(r.rec))}<br>📍 ${r.pts.join(', ')}</div><div class="bar" style="margin:10px 0 0"><button class="btn s" onclick="roTog('${r.id}')">${r.st=='Pendiente'?'Marcar completada':'Reabrir'}</button><button class="btn s o" onclick="roEdit('${r.id}')">Editar</button><button class="btn s d" onclick="roDel('${r.id}')">Eliminar</button></div></div>`;
+ const pe=S.ro.filter(r=>r.st=='Pendiente'),co=S.ro.filter(r=>r.st!='Pendiente');
+ return`<div class="bar"><button class="btn" onclick="roEdit()">+ Crear ruta</button></div><h2>Pendientes (${pe.length})</h2><div class="grid k2">${pe.map(card).join('')||'<p class="sub">Sin rutas pendientes</p>'}</div><h2 style="margin-top:18px">Completadas (${co.length})</h2><div class="grid k2">${co.map(card).join('')||'<p class="sub">Sin rutas completadas</p>'}</div>`};
+S.ro=S.ro||[];
+function roEdit(id){const r=S.ro.find(x=>x.id==id);form(r?'Editar ruta':'Nueva ruta',[{k:'name',l:'Nombre de la ruta',r:1},{k:'day',l:'Días',r:1},{k:'time',l:'Horario',t:'time',r:1},{k:'pts',l:'Puntos ecológicos a visitar',t:'chk',o:S.pts.map(p=>[p.id,p.id]),r:1},{k:'rec',l:'Reciclador responsable',t:'sel',o:rcOpt()},{k:'st',l:'Estado',t:'sel',o:[['Pendiente','Pendiente'],['Completada','Completada']]}],r||{st:'Pendiente',time:'08:00'},o=>{if(r)Object.assign(r,o);else S.ro.push({id:'T'+Date.now(),...o});save();toast('Ruta guardada ✔');go('rutas')})}
+function roTog(id){const r=S.ro.find(x=>x.id==id);r.st=r.st=='Pendiente'?'Completada':'Pendiente';save();toast('Estado actualizado');go('rutas')}
+function roDel(id){ask('¿Eliminar esta ruta?',()=>{S.ro=S.ro.filter(r=>r.id!=id);save();toast('Ruta eliminada');go('rutas')})}
+// RECICLADORES
+VIEWS.reci=()=>`<div class="card"><div class="bar"><button class="btn" onclick="rcEdit()">+ Registrar reciclador</button></div><div class="tw"><table><tr><th>Nombre</th><th>Documento (demo)</th><th>Teléfono</th><th>Asociación</th><th>Estado</th><th>Recolecciones</th><th></th></tr>${S.rc.map(r=>{const h=S.rec.filter(x=>x.rec==r.id);return`<tr><td><b>${esc(r.name)}</b></td><td>${esc(r.doc)}</td><td>${esc(r.tel)}</td><td>${esc(r.aso)}</td><td><span class="tag ${r.st}">${r.st}</span></td><td>${h.length} (${sum(h)} kg)</td><td style="white-space:nowrap"><button class="btn s o" onclick="rcHist('${r.id}')">Historial</button> <button class="btn s o" onclick="rcEdit('${r.id}')">Editar</button> <button class="btn s d" onclick="rcDel('${r.id}')">Eliminar</button></td></tr>`}).join('')}</table></div></div>`;
+function rcEdit(id){const r=S.rc.find(x=>x.id==id);form(r?'Editar reciclador':'Nuevo reciclador',[{k:'name',l:'Nombre completo',r:1},{k:'doc',l:'Documento de identificación (demo)',r:1},{k:'tel',l:'Teléfono'},{k:'aso',l:'Asociación a la que pertenece'},{k:'st',l:'Estado',t:'sel',o:[['Activo','Activo'],['Inactivo','Inactivo']]}],r||{st:'Activo'},o=>{if(r)Object.assign(r,o);else S.rc.push({id:'R'+Date.now(),...o});save();toast('Reciclador guardado ✔');go('reci')})}
+function rcDel(id){ask('¿Eliminar este reciclador?',()=>{S.rc=S.rc.filter(r=>r.id!=id);save();toast('Reciclador eliminado');go('reci')})}
+function rcHist(id){const h=S.rec.filter(x=>x.rec==id);modal(`<h2>Historial · ${esc(pn(id))}</h2><div class="tw"><table><tr><th>Fecha</th><th>Punto</th><th>Material</th><th>kg</th></tr>${h.slice(0,25).map(x=>`<tr><td>${x.date}</td><td>${x.pt}</td><td>${x.mat}</td><td>${x.kg}</td></tr>`).join('')||'<tr><td colspan="4">Sin recolecciones</td></tr>'}</table></div><p><b>Total: ${sum(h)} kg</b></p><button class="btn o" onclick="modal()">Cerrar</button>`)}
+// EDUCACIÓN
+VIEWS.edu=()=>`<div class="grid k4"><div class="can" style="background:#64748b"><div>🥤📰🍾</div><b>Caneca blanca</b><br>Residuos aprovechables: plástico, cartón, papel, vidrio y metales limpios y secos.</div><div class="can" style="background:#1f2937"><div>🧻🍬🧼</div><b>Caneca negra</b><br>Residuos no aprovechables: papel higiénico, servilletas sucias, empaques contaminados.</div><div class="can" style="background:#16a34a"><div>🍌🥬🥚</div><b>Caneca verde</b><br>Orgánicos aprovechables: restos de comida, cáscaras de frutas y verduras.</div></div>
+<div class="grid k2" style="margin-top:14px"><div class="card"><h2>✅ Consejos para separar bien</h2><ul class="ul"><li>Vacía y enjuaga envases antes de depositarlos.</li><li>Aplasta botellas y cajas para ahorrar espacio.</li><li>Mantén el cartón y el papel secos y sin grasa.</li><li>No mezcles residuos orgánicos con aprovechables.</li><li>Ante la duda, pregunta al personal del mercado.</li></ul></div>
+<div class="card"><h2>🌍 ¿Por qué reciclar?</h2><p class="sub" style="font-size:14px">Separar en la fuente reduce los residuos que llegan al relleno sanitario, genera ingresos para los recicladores de oficio, ahorra materias primas y mantiene los mercados más limpios y saludables.</p></div></div>
+<div class="card" style="margin-top:14px"><h2>📣 Campañas y capacitaciones (propuesta)</h2><ul class="ul"><li>🗓 <b>Taller para comerciantes:</b> código de colores y separación en el puesto.</li><li>🗓 <b>Jornada de sensibilización</b> para visitantes en la entrada principal.</li><li>🗓 <b>Capacitación a recicladores:</b> manejo seguro y registro de recolecciones.</li><li>🗓 <b>Campaña “Mi puesto separa”:</b> reconocimiento a los comerciantes participantes.</li></ul><span class="demo">Actividades propuestas con fines de demostración; no son convenios confirmados.</span></div>`;
+// INFORMES
+const fil=()=>S.rec.filter(r=>(!F.from||r.date>=F.from)&&(!F.to||r.date<=F.to)&&(!F.im||r.mat==F.im));
+VIEWS.info=()=>{const a=fil(),o=by(a,r=>r.mat),t=sum(a),META=9000;
+ return`<div class="card"><div class="bar"><label style="margin:0">Desde<input type="date" value="${F.from}" onchange="F.from=this.value;go('info')"></label><label style="margin:0">Hasta<input type="date" value="${F.to}" onchange="F.to=this.value;go('info')"></label><label style="margin:0">Material<select onchange="F.im=this.value;go('info')"><option value="">Todos</option>${MAT.map(m=>`<option ${F.im==m?'selected':''}>${m}</option>`).join('')}</select></label><button class="btn o" onclick="F.from=F.to=F.im='';go('info')">Limpiar</button><button class="btn" onclick="csv()">Copiar CSV (Excel)</button><button class="btn" onclick="window.print()">Imprimir / PDF</button></div></div>
+ <div class="grid k4" style="margin-top:14px">${[['Total recuperado',t.toLocaleString('es-CO')+' kg'],['Recolecciones',a.length],['Recuperación vs. meta demo ('+META+' kg)',Math.round(t/META*100)+'%'],['Puntos activos',S.pts.filter(p=>p.st!='Lleno').length+' de '+S.pts.length]].map(k=>`<div class="card kpi"><span class="sub">${k[0]}</span><b>${k[1]}</b></div>`).join('')}</div>
+ <div class="grid k2" style="margin-top:14px"><div class="card"><h2>Comparación de materiales (kg)</h2><canvas id="c1" height="200"></canvas></div><div class="card"><h2>Recolecciones por mes (kg)</h2><canvas id="c2" height="200"></canvas></div></div>
+ <div class="card" style="margin-top:14px"><h2>Detalle por material</h2><div class="tw"><table><tr><th>Material</th><th>kg</th><th>% del total</th></tr>${MAT.map(m=>`<tr><td>${m}</td><td>${o[m]||0}</td><td>${t?Math.round((o[m]||0)/t*100):0}%</td></tr>`).join('')}</table></div></div>`};
+AFTER.info=()=>{const a=fil(),o=by(a,r=>r.mat),[l,d]=monthly(a);chart('c1',{type:'bar',data:{labels:MAT,datasets:[{data:MAT.map(m=>o[m]||0),backgroundColor:MC,borderRadius:8}]},options:{plugins:{legend:{display:false}}}});chart('c2',{type:'line',data:{labels:l,datasets:[{data:d,borderColor:'#0ea5e9',backgroundColor:'rgba(14,165,233,.15)',fill:true,tension:.3}]},options:{plugins:{legend:{display:false}}}})};
+function csv(){const t='Fecha;Punto;Material;kg;Reciclador;Observaciones\n'+fil().map(r=>[r.date,r.pt,r.mat,r.kg,pn(r.rec),r.obs].join(';')).join('\n');(navigator.clipboard?.writeText(t)||Promise.reject()).then(()=>toast('CSV copiado: pégalo en Excel'),()=>{modal(`<h2>Copia el CSV</h2><textarea rows="8" onfocus="this.select()">${esc(t)}</textarea><button class="btn o" onclick="modal()">Cerrar</button>`)})}
+user?shell():login();
+</script></body></html>
