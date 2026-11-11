@@ -73,13 +73,13 @@ function login(){
  <label>Correo electrónico<input id="em" type="email" value="admin@ecomercado.co"></label><label>Contraseña<input id="pw" type="password" value="admin123"></label>
  <button class="btn" style="width:100%" onclick="doLogin()">Iniciar sesión</button>
  <p class="sub"><b>Usuarios de demostración:</b><br>admin@ecomercado.co / admin123 (Administrador)<br>comerciante@ecomercado.co / demo123<br>reciclador@ecomercado.co / demo123</p>
- <span class="demo">Prototipo universitario · datos de demostración</span></div></div>`}
+ <span class="demo"></span></div></div>`}
 function doLogin(){const U={'admin@ecomercado.co':['admin123','Administración del mercado'],'comerciante@ecomercado.co':['demo123','Comerciante (demo)'],'reciclador@ecomercado.co':['demo123','Reciclador (demo)']};const u=U[$('em').value.trim().toLowerCase()];if(!u||u[0]!==$('pw').value)return toast('Credenciales incorrectas');user=u[1];try{localStorage.setItem('eco1u',user)}catch(e){}shell()}
 function logout(){user=null;try{localStorage.removeItem('eco1u')}catch(e){}login()}
 function shell(){
  $('root').innerHTML=`<div class="app"><aside id="sb"><div class="logo">${LOGO}<div>EcoMercado<br>Montería<small>${esc(user)}</small></div></div>${NAV.map(n=>`<button class="nav" data-v="${n[0]}" onclick="go('${n[0]}')">${n[1]} ${n[2]}</button>`).join('')}<button class="nav" onclick="logout()" style="margin-top:auto">🚪 Cerrar sesión</button></aside><main id="mn"></main></div>`;go(V)}
 function go(v){V=v;$('sb').classList.remove('open');document.querySelectorAll('.nav[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v==v));Object.values(CH).forEach(c=>c.destroy());CH={};
- const t=NAV.find(n=>n[0]==v)[2];$('mn').innerHTML=`<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="mt" onclick="$('sb').classList.toggle('open')">☰</button><div><h1>${t}</h1><div class="sub">EcoMercado Montería · Mercados públicos del área urbana</div></div></div><span class="demo">Datos de demostración · prototipo sin implementación física real</span></div><div id="v"></div>`;
+ const t=NAV.find(n=>n[0]==v)[2];$('mn').innerHTML=`<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="mt" onclick="$('sb').classList.toggle('open')">☰</button><div><h1>${t}</h1><div class="sub">EcoMercado Montería · Mercados públicos del área urbana</div></div></div><span class="demo"></span></div><div id="v"></div>`;
  $('v').innerHTML=VIEWS[v]();(AFTER[v]||(()=>{}))();window.scrollTo(0,0)}
 const chart=(id,cfg)=>{CH[id]?.destroy();CH[id]=new Chart($(id),cfg)};
 const monthly=a=>{const o=by(a,r=>r.date.slice(0,7));const k=Object.keys(o).sort();return[k.map(mk),k.map(x=>o[x])]};
